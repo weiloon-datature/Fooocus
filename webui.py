@@ -1,24 +1,25 @@
-import gradio as gr
-import random
+import copy
 import os
+import random
 import time
-import shared
-import modules.config
+
+import args_manager
+import gradio as gr
+
 import fooocus_version
-import modules.html
+import modules.advanced_parameters as advanced_parameters
 import modules.async_worker as worker
+import modules.config
 import modules.constants as constants
 import modules.flags as flags
 import modules.gradio_hijack as grh
-import modules.advanced_parameters as advanced_parameters
+import modules.html
 import modules.style_sorter as style_sorter
-import args_manager
-import copy
-
-from modules.sdxl_styles import legal_style_names
-from modules.private_logger import get_current_html_path
-from modules.ui_gradio_extensions import reload_javascript
+import shared
 from modules.auth import auth_enabled, check_auth
+from modules.private_logger import get_current_html_path
+from modules.sdxl_styles import legal_style_names
+from modules.ui_gradio_extensions import reload_javascript
 
 
 def generate_clicked(*args):
@@ -524,10 +525,14 @@ with shared.gradio_root:
 
         def trigger_describe(mode, img):
             if mode == flags.desc_type_photo:
-                from extras.interrogate import default_interrogator as default_interrogator_photo
+                from extras.interrogate import (
+                    default_interrogator as default_interrogator_photo,
+                )
                 return default_interrogator_photo(img), ["Fooocus V2", "Fooocus Enhance", "Fooocus Sharp"]
             if mode == flags.desc_type_anime:
-                from extras.wd14tagger import default_interrogator as default_interrogator_anime
+                from extras.wd14tagger import (
+                    default_interrogator as default_interrogator_anime,
+                )
                 return default_interrogator_anime(img), ["Fooocus V2", "Fooocus Masterpiece"]
             return mode, ["Fooocus V2"]
 
